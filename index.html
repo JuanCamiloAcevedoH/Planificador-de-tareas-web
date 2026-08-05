@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planificador de Tareas Personal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container mt-4">
+        <!-- 1. EL HEADER -->
+        <header class="app-header mb-4 text-center">
+            <h1>Planificador de Tareas Personal</h1>
+        </header>
+
+        <div class="row">
+            <!-- 2. COLUMNA DEL FORMULARIO (Izquierda) -->
+            <aside class="col-md-5">
+                <section class="p-3 border rounded bg-light">
+                    <h2>Nuevo Proyecto / Tarea</h2>
+                    <form id="task-form">
+                        <div class="mb-3">
+                            <label for="task-name" class="form-label">Nombre de la Tarea</label>
+                            <input type="text" class="form-control" id="task-name" placeholder="Ej: Estudiar Flexbox"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="task-desc" class="form-label">Descripcion (Opcional)</label>
+                            <textarea class="form-control" id="task-desc" rows="3"></textarea>
+                        </div>
+                        <!-- Boton de accion -->
+                        <button type="submit" class="btn btn-primary w-100">[ + Agregar tarea ]</button>
+                    </form>
+                </section>
+            </aside>
+
+            <!-- 3. COLUMNA DE LA LISTA (Derecha) -->
+            <main class="col-md-7">
+                <section class="p-3 border rounded">
+                    <h2>Mis Tareas Pendientes</h2>
+                    <ul class="list-group" id="task-list">
+                        <!-- Elementos de prueba (estaticos) para visualizacion -->
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>○ Estudiar Flexbox</span>
+                            <span class="badge bg-secondary rounded-pill">Info</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>○ Practicar Grid Layout</span>
+                            <span class="badge bg-secondary rounded-pill">Alta</span>
+                        </li>
+                        <!-- Mas tareas se agregaran aqui dinamicamente -->
+                    </ul>
+                </section>
+            </main>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
