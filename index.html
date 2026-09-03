@@ -23,7 +23,7 @@
       <div class="col-12">
         <div class="p-4 bg-white rounded shadow-sm border text-center">
           <h1 class="h3 m-0 fw-bold text-primary">
-            <i class="bi bi-journal-check me-2"></i>Planificador de Tareas
+            📒Planificador de Tareas
           </h1>
         </div>
       </div>
@@ -32,40 +32,51 @@
     <!-- CONTENIDO PRINCIPAL: FORMULARIO Y LISTA -->
     <main class="row g-4">
 
-      <!-- [ FORMULARIO ] -->
+      <!-- [ PASO 1: FORMULARIO DE TAREAS ] -->
       <section class="col-12 col-lg-4">
-        <div class="card shadow-sm border-0">
-          <div class="card-body p-4">
-            <h2 class="h5 card-title mb-3 border-bottom pb-2">Agregar Tarea</h2>
+        <div class="card p-4 rounded shadow-sm">
+          <h2 class="h5 card-title mb-3 border-bottom pb-2">Agregar Tarea</h2>
 
-            <form id="form-tarea">
-              <!-- Nombre / Título -->
-              <div class="mb-3">
-                <label for="tituloTarea" class="form-label">Título de la tarea</label>
-                <input type="text" class="form-control" id="tituloTarea" placeholder="Ej. Estudiar Bootstrap" required>
-              </div>
-
-              <!-- Descripción / Detalle -->
-              <div class="mb-3">
-                <label for="descripcionTarea" class="form-label">Descripción</label>
-                <textarea class="form-control" id="descripcionTarea" rows="3"
-                  placeholder="Detalles sobre la tarea..."></textarea>
-              </div>
-
-              <!-- Fecha -->
-              <div class="mb-3">
-                <label for="fechaTarea" class="form-label">Fecha límite</label>
-                <input type="date" class="form-control" id="fechaTarea">
-              </div>
-
-              <!-- Botón Agregar Tarea -->
-              <button type="submit"
-                class="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2">
-                <i class="bi bi-plus-circle"></i> + Agregar tarea
-              </button>
-            </form>
-
+          <!-- Alerta de error para validación con JS -->
+          <div id="mensaje-error" class="alert alert-danger d-none py-2 px-3 small mb-3" role="alert">
+            <!-- El mensaje de error se insertará dinámicamente -->
           </div>
+
+          <form id="form-tarea" novalidate>
+            <!-- 1. Nombre -->
+            <div class="mb-3">
+              <label for="input-nombre" class="form-label small fw-semibold">Título de la tarea</label>
+              <input type="text" class="form-control" id="input-nombre" placeholder="Ej. Estudiar Bootstrap">
+            </div>
+
+            <!-- 2. Descripción -->
+            <div class="mb-3">
+              <label for="input-descripcion" class="form-label small fw-semibold">Descripción</label>
+              <textarea class="form-control" id="input-descripcion" rows="3"
+                placeholder="Detalles sobre la tarea..."></textarea>
+            </div>
+
+            <!-- 3. Fecha de entrega -->
+            <div class="mb-3">
+              <label for="input-fecha" class="form-label small fw-semibold">Fecha límite</label>
+              <input type="date" class="form-control text-white" id="input-fecha">
+            </div>
+
+            <!-- 4. Estado -->
+            <div class="mb-3">
+              <label for="select-estado" class="form-label small fw-semibold">Estado</label>
+              <select class="form-select" id="select-estado">
+                <option value="Pendiente" selected>Pendiente</option>
+                <option value="En proceso">En proceso</option>
+                <option value="Completada">Completada</option>
+              </select>
+            </div>
+
+            <!-- 5. Botón de envío -->
+            <button type="submit" class="btn btn-primary w-100 fw-bold">
+              <i class="bi bi-plus-circle me-1"></i> Agregar tarea
+            </button>
+          </form>
         </div>
       </section>
 
@@ -248,8 +259,49 @@
 
   </div>
 
+  <!-- Modal de Alerta de Errores -->
+  <div class="modal fade" id="modalError" tabindex="-1" aria-labelledby="modalErrorLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark text-white border-danger shadow-lg">
+        <div class="modal-header border-bottom border-secondary">
+          <h5 class="modal-title text-danger" id="modalErrorLabel">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>Campos Incompletos
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-light" id="contenido-modal-error">
+          <!-- El mensaje de error se inserta dinámicamente -->
+        </div>
+        <div class="modal-footer border-top border-secondary">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Entendido</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Confirmación de Éxito -->
+  <div class="modal fade" id="modalExito" tabindex="-1" aria-labelledby="modalExitoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark text-white border-success shadow-lg">
+        <div class="modal-header border-bottom border-secondary">
+          <h5 class="modal-title text-success" id="modalExitoLabel">
+            <i class="bi bi-check-circle-fill me-2"></i>¡Tarea Registrada!
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-light">
+          La tarea se ha validado y guardado correctamente.
+        </div>
+        <div class="modal-footer border-top border-secondary">
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal">Aceptar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- CDN Bootstrap JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
 </body>
 
 </html>
