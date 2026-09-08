@@ -1,8 +1,9 @@
+// js/index.js
+
 // 1. Instancia de TaskManager
 const taskManager = new TaskManager();
-console.log(taskManager.tasks);
 
-// 2. Elementos del DOM del formulario
+// Referencias del DOM para el Formulario
 const formTarea = document.querySelector('#form-tarea');
 const inputNombre = document.querySelector('#input-nombre');
 const inputDescripcion = document.querySelector('#input-descripcion');
@@ -17,7 +18,7 @@ const contenidoModalError = document.getElementById('contenido-modal-error');
 const modalExitoElemento = document.getElementById('modalExito');
 const modalExitoBS = new bootstrap.Modal(modalExitoElemento);
 
-// 3. Función de validación
+// Función de validación
 function validFormFieldInput(data) {
   if (data.nombre.trim() === '') return "El nombre de la tarea no puede estar vacío.";
   if (data.descripcion.trim() === '') return "La descripción no puede estar vacía.";
@@ -26,33 +27,46 @@ function validFormFieldInput(data) {
   return true;
 }
 
-// 4. Listener del formulario
-formTarea.addEventListener('submit', (event) => {
-  event.preventDefault();
+// 2. Escuchar el evento submit del formulario
+if (formTarea) {
+  formTarea.addEventListener('submit', (event) => {
+    event.preventDefault();
 
-  const dataTarea = {
-    nombre: inputNombre.value,
-    descripcion: inputDescripcion.value,
-    fecha: inputFecha.value,
-    estado: selectEstado.value
-  };
+    const dataTarea = {
+      nombre: inputNombre.value,
+      descripcion: inputDescripcion.value,
+      fecha: inputFecha.value,
+      estado: selectEstado.value
+    };
 
-  const resultado = validFormFieldInput(dataTarea);
+    const resultado = validFormFieldInput(dataTarea);
 
-  if (resultado !== true) {
-    contenidoModalError.textContent = resultado;
-    modalErrorBS.show();
-  } else {
-    modalExitoBS.show();
-    formTarea.reset();
-  }
-});
+    if (resultado !== true) {
+      contenidoModalError.textContent = resultado;
+      modalErrorBS.show();
+    } else {
+      // Registro programático en la clase TaskManager
+      taskManager.addTask(
+        dataTarea.nombre,
+        dataTarea.descripcion,
+        dataTarea.fecha,
+        dataTarea.estado
+      );
 
-// 5. Interacción para marcar/desmarcar tarea completada (Sprint 2)
+      console.log("Tareas registradas en taskManager.tasks:", taskManager.tasks);
+      
+      modalExitoBS.show();
+      formTarea.reset();
+    }
+  });
+}
+
+// 3. Interacción para conmutar estado de las tarjetas (Completada/Pendiente)
 const contenedorTareas = document.querySelector('#contenedor-tareas');
 
 if (contenedorTareas) {
   contenedorTareas.addEventListener('click', (event) => {
+    // Buscar si el clic proviene del botón de estado (icono de check o botón verde)
     const btnCompletar = event.target.closest('.btn-outline-success, .btn-success');
     
     if (btnCompletar) {
@@ -61,17 +75,23 @@ if (contenedorTareas) {
       const estaCompletada = tarjeta.classList.contains('estado-completada');
 
       if (estaCompletada) {
+        // Volver a estado Pendiente
         tarjeta.classList.remove('estado-completada');
         tarjeta.classList.add('estado-pendiente');
-        badgeEstado.className = 'badge bg-warning text-dark';
-        badgeEstado.textContent = 'Pendiente';
+        if (badgeEstado) {
+          badgeEstado.className = 'badge bg-warning text-dark';
+          badgeEstado.textContent = 'Pendiente';
+        }
         btnCompletar.classList.remove('btn-success');
         btnCompletar.classList.add('btn-outline-success');
       } else {
+        // Cambiar a estado Completada
         tarjeta.classList.remove('estado-pendiente', 'estado-en-proceso');
         tarjeta.classList.add('estado-completada');
-        badgeEstado.className = 'badge bg-success';
-        badgeEstado.textContent = 'Completada';
+        if (badgeEstado) {
+          badgeEstado.className = 'badge bg-success';
+          badgeEstado.textContent = 'Completada';
+        }
         btnCompletar.classList.remove('btn-outline-success');
         btnCompletar.classList.add('btn-success');
       }
