@@ -16,10 +16,9 @@ Aplicación web interactiva desarrollada para la gestión y organización de tar
 
 ## 🔗 Enlaces del Proyecto
 
-* 📌 **Tablero de Trello:** (https://trello.com/invite/b/6a4afbb6743507d950b2a739
-ATTIec565f0ed24b2c3e15e97b2217ac3a39A2B88D37/proyecto-individual)
-* 🎨 **Diseño en Figma:** [Enlace a tu Figma aquí]https://www.figma.com/design/IuHofj6IJqHlTcYGOGMfDQ/WireFrame-Planificador-de-tareas?node-id=2002-20&m=dev&t=ma3kVS3LZ0ujfInt-1
-* 🌐 **Demo en Vivo (GitHub Pages):** [Enlace a tu GitHub Pages aquí]https://github.com/JuanCamiloAcevedoH/Planificador-de-tareas-web.git
+* 📌 **Tablero de Trello:** https://trello.com/b/LadBl85T/proyecto-individual
+* 🎨 **Diseño en Figma:** https://www.figma.com/design/IuHofj6IJqHlTcYGOGMfDQ/WireFrame-Planificador-de-tareas?node-id=2002-20&m=dev&t=ma3kVS3LZ0ujfInt-1
+* 🌐 **Demo en Vivo (GitHub Pages):**  https://juancamiloacevedoh.github.io/Planificador-de-tareas-web/
 
 ## ⚙️ Funcionalidades Implementadas (Sprint 1)
 
