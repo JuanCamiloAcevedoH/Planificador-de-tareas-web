@@ -17,7 +17,7 @@ class TaskManager {
     this.tasks.push(newTask);
   }
 
-  // Método para eliminar tarea por ID (Paso 2 Tarea 6)
+  // Método para eliminar tarea por ID 
   deleteTask(taskId) {
     const newTasks = [];
     for (let task of this.tasks) {
