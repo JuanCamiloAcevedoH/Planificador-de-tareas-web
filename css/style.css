@@ -1,91 +1,94 @@
+/* Importar Fuentes Creativas */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Poppins:wght@400;500;600&display=swap');
 
+/* Fondo Minimalista con Degradado Oscuro Elegante */
 body {
-  background-color: #63c3c3 !important;
+  background: radial-gradient(circle at 15% 15%, #1e1e38 0%, #0f0f1a 50%, #080811 100%) !important;
   color: #f8fafc;
-  font-family: 'Poppins', sans-serif; 
+  font-family: 'Poppins', sans-serif;
   min-height: 100vh;
 }
 
-
-h1, h2, h3, h4, h5, .card-title, .modal-title {
-  font-family: 'Fredoka', sans-serif; 
-  letter-spacing: 0.5px;
-}
-
+/* Título Principal */
 h1 {
-  color: #818cf8; 
-  text-shadow: 0 2px 10px rgba(129, 140, 248, 0.2);
+  font-family: 'Fredoka', sans-serif;
+  font-size: 2.5rem;
+  letter-spacing: 0.5px;
+  text-shadow: 0 4px 20px rgba(129, 140, 248, 0.25);
 }
 
-/* Tarjetas y Contenedores */
+/* Tarjeta del Formulario */
 .card-custom {
-  background-color: #1e293b;
-  border: 1px solid #334155;
-  border-radius: 16px; 
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  background-color: #161626;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
 }
 
+/* Tarjetas de Tareas Enlistadas */
 .card-tarea {
-  background-color: #1e293b !important;
-  border: 1px solid #334155 !important;
-  border-left: 6px solid #818cf8 !important;
-  border-radius: 14px;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: #161626 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-left: 6px solid #6366f1 !important;
+  border-radius: 16px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .card-tarea:hover {
-  transform: translateY(-3px) scale(1.01);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
 }
 
-/* Controles de Formulario */
+/* Campos de Texto e Inputs */
 .form-control-dark {
-  background-color: #0f172a !important;
-  border: 1.5px solid #334155 !important;
+  background-color: #0b0b14 !important;
+  border: 1px solid #2a2a40 !important;
   color: #f8fafc !important;
-  border-radius: 10px;
-  font-family: 'Poppins', sans-serif;
+  border-radius: 12px;
+  padding: 0.65rem 0.9rem;
   font-size: 0.95rem;
 }
 
 .form-control-dark:focus {
-  border-color: #818cf8 !important;
-  box-shadow: 0 0 0 0.25rem rgba(129, 140, 248, 0.2) !important;
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 0.25rem rgba(99, 102, 241, 0.2) !important;
 }
 
 .form-control-dark::placeholder {
-  color: #64748b;
+  color: #52527a;
 }
 
-/* Icono del Calendario */
+/* Icono del Calendario en Blanco */
 .calendar-white::-webkit-calendar-picker-indicator {
   filter: invert(1) brightness(100%);
   cursor: pointer;
 }
 
-/* Botones */
+/* Botón de Agregar Tarea */
 .btn-primary-custom {
-  background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
   border: none;
   color: #ffffff;
-  border-radius: 10px;
+  border-radius: 12px;
   font-family: 'Fredoka', sans-serif;
   font-size: 1.05rem;
   letter-spacing: 0.5px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
 }
 
 .btn-primary-custom:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
 }
 
-/* Badges e Insignias de Estado */
+/* Badges e Indicadores de Estado */
 .badge {
   font-family: 'Fredoka', sans-serif;
   font-weight: 500;
-  padding: 0.4em 0.8em;
-  border-radius: 8px;
+  padding: 0.45em 0.85em;
+  border-radius: 10px;
 }
 
 .card-tarea.estado-pendiente {
@@ -97,5 +100,5 @@ h1 {
 }
 
 .text-light-50 {
-  color: #cbd5e1;
+  color: #a1a1aa;
 }

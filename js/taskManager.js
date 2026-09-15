@@ -26,7 +26,6 @@ class TaskManager {
     this.tasks = newTasks;
   }
 
-  // Método requerido en el Paso 4 de la Tarea 7
   getTaskById(taskId) {
     let foundTask;
     for (let task of this.tasks) {
@@ -37,21 +36,23 @@ class TaskManager {
     return foundTask;
   }
 
+  // Paso 1: Guardar estado en LocalStorage
   save() {
     const tasksJson = JSON.stringify(this.tasks);
     localStorage.setItem('tasks', tasksJson);
-    const currentIdStr = String(this.currentId);
-    localStorage.setItem('currentId', currentIdStr);
+    const currentId = String(this.currentId);
+    localStorage.setItem('currentId', currentId);
   }
 
+  // Paso 2: Cargar estado desde LocalStorage
   load() {
-    if (localStorage.getItem('tasks')) {
-      const tasksJson = localStorage.getItem('tasks');
+    const tasksJson = localStorage.getItem('tasks');
+    if (tasksJson) {
       this.tasks = JSON.parse(tasksJson);
     }
-    if (localStorage.getItem('currentId')) {
-      const currentIdStr = localStorage.getItem('currentId');
-      this.currentId = Number(currentIdStr);
+    const currentId = localStorage.getItem('currentId');
+    if (currentId) {
+      this.currentId = Number(currentId);
     }
   }
 }
