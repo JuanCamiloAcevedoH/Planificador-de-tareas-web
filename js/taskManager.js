@@ -1,4 +1,3 @@
-
 class TaskManager {
   constructor(currentId = 0) {
     this.tasks = [];
@@ -17,7 +16,6 @@ class TaskManager {
     this.tasks.push(newTask);
   }
 
-  // Método para eliminar tarea por ID 
   deleteTask(taskId) {
     const newTasks = [];
     for (let task of this.tasks) {
@@ -28,7 +26,17 @@ class TaskManager {
     this.tasks = newTasks;
   }
 
-  // Persistencia en localStorage
+  // Método requerido en el Paso 4 de la Tarea 7
+  getTaskById(taskId) {
+    let foundTask;
+    for (let task of this.tasks) {
+      if (task.id === taskId) {
+        foundTask = task;
+      }
+    }
+    return foundTask;
+  }
+
   save() {
     const tasksJson = JSON.stringify(this.tasks);
     localStorage.setItem('tasks', tasksJson);

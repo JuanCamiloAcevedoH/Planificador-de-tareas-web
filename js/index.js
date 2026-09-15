@@ -19,7 +19,7 @@ const modalExitoBS = new bootstrap.Modal(modalExitoElemento);
 
 const contenedorTareas = document.querySelector('#contenedor-tareas');
 
-// Función auxiliar para renderizar tareas registradas en el DOM
+// Función auxiliar para renderizar la lista de tareas
 function renderTasks() {
   if (!contenedorTareas) return;
   contenedorTareas.innerHTML = '';
@@ -30,7 +30,7 @@ function renderTasks() {
     let btnCompletarClass = 'btn-outline-success';
     let cardClass = 'estado-pendiente';
 
-    if (task.status === 'COMPLETADA') {
+    if (task.status === 'DONE' || task.status === 'COMPLETADA') {
       badgeClass = 'bg-success';
       badgeText = 'Completada';
       btnCompletarClass = 'btn-success';
@@ -50,8 +50,8 @@ function renderTasks() {
           <p class="card-text">${task.description}</p>
           <p class="card-text"><small class="text-light-50">Fecha de entrega: ${task.dueDate}</small></p>
           <div class="d-flex justify-content-end gap-2">
-            <button class="btn ${btnCompletarClass} btn-sm btn-completar">
-              <i class="bi bi-check-lg"></i>
+            <button class="done-button btn ${btnCompletarClass} btn-sm btn-completar">
+              Mark As Done
             </button>
             <button class="delete-button btn btn-danger btn-sm">
               Eliminar
@@ -64,7 +64,7 @@ function renderTasks() {
   });
 }
 
-// Cargar tareas guardadas al iniciar la vista
+// Cargar tareas al iniciar
 renderTasks();
 
 // Función de validación de entradas
@@ -76,7 +76,7 @@ function validFormFieldInput(data) {
   return true;
 }
 
-// 2. Escuchar evento submit del formulario
+// Escuchar evento submit del formulario
 if (formTarea) {
   formTarea.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -94,7 +94,6 @@ if (formTarea) {
       contenidoModalError.textContent = resultado;
       modalErrorBS.show();
     } else {
-      // Registrar tarea en la clase y guardar en LocalStorage
       taskManager.addTask(
         dataTarea.nombre,
         dataTarea.descripcion,
@@ -102,7 +101,6 @@ if (formTarea) {
         dataTarea.estado
       );
       taskManager.save();
-
       renderTasks();
       modalExitoBS.show();
       formTarea.reset();
@@ -110,33 +108,32 @@ if (formTarea) {
   });
 }
 
-// 3. Delegación de eventos para Conmutar Estado y Eliminar Tareas
+// Delegación de eventos para la Lista de Tareas (Paso 2 y Paso 5 Tarea 7)
 if (contenedorTareas) {
   contenedorTareas.addEventListener('click', (event) => {
-
-    // Accion A: ELIMINAR TAREA
-    if (event.target.classList.contains('delete-button')) {
-      const parentTask = event.target.closest('.card-tarea');
-
+    
+    // 1. Detección del botón "Mark As Done" (.done-button)
+    const btnDone = event.target.closest('.done-button');
+    if (btnDone) {
+      const parentTask = btnDone.closest('.card-tarea');
       if (parentTask) {
         const taskId = Number(parentTask.dataset.taskId);
-        taskManager.deleteTask(taskId);
-        taskManager.save();
-        renderTasks();
+        const task = taskManager.getTaskById(taskId);
+        
+        if (task) {
+          task.status = (task.status === 'DONE') ? 'PORHACER' : 'DONE';
+          taskManager.save();
+          renderTasks();
+        }
       }
     }
 
-    // Accion B: MARCAR COMO COMPLETADA / PENDIENTE
-    const btnCompletar = event.target.closest('.btn-completar');
-    if (btnCompletar) {
-      const parentTask = btnCompletar.closest('.card-tarea');
-      const taskId = Number(parentTask.dataset.taskId);
-
-      // Buscar la tarea en la colección de TaskManager
-      const task = taskManager.tasks.find(t => t.id === taskId);
-
-      if (task) {
-        task.status = (task.status === 'COMPLETADA') ? 'PORHACER' : 'COMPLETADA';
+    // 2. Detección del botón "Eliminar" (.delete-button)
+    if (event.target.classList.contains('delete-button')) {
+      const parentTask = event.target.closest('.card-tarea');
+      if (parentTask) {
+        const taskId = Number(parentTask.dataset.taskId);
+        taskManager.deleteTask(taskId);
         taskManager.save();
         renderTasks();
       }
