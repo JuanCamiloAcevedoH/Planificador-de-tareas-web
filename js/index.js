@@ -1,6 +1,9 @@
-// 1. Instancia global de TaskManager y carga inicial de localStorage
+// 1. Instancia global de TaskManager y carga inicial desde LocalStorage
 const taskManager = new TaskManager();
 taskManager.load();
+
+// Variable global para almacenar el ID de la tarea a eliminar
+let idTareaAEliminar = null;
 
 // Referencias del DOM para el Formulario
 const formTarea = document.querySelector('#form-tarea');
@@ -17,13 +20,36 @@ const contenidoModalError = document.getElementById('contenido-modal-error');
 const modalExitoElemento = document.getElementById('modalExito');
 const modalExitoBS = new bootstrap.Modal(modalExitoElemento);
 
+const modalConfirmarElemento = document.getElementById('modalConfirmarEliminar');
+const modalConfirmarBS = new bootstrap.Modal(modalConfirmarElemento);
+const btnConfirmarEliminar = document.getElementById('btn-confirmar-eliminar');
+
 const contenedorTareas = document.querySelector('#contenedor-tareas');
 
-// Función auxiliar para renderizar la lista de tareas
+// 2. Función de renderizado dinámico con estado vacío (Empty State)
 function renderTasks() {
   if (!contenedorTareas) return;
   contenedorTareas.innerHTML = '';
 
+  // Actualizar el contador de tareas en la cabecera
+  const contadorElemento = document.querySelector('#contador-tareas');
+  if (contadorElemento) {
+    contadorElemento.textContent = taskManager.tasks.length;
+  }
+
+  // VALIDACIÓN: Si no hay tareas registradas, mostrar la tarjeta receptora (Empty State)
+  if (taskManager.tasks.length === 0) {
+    contenedorTareas.innerHTML = `
+      <div class="text-center py-5 empty-state">
+        <i class="bi bi-clipboard-check display-1 mb-3 d-block"></i>
+        <h5 class="text-white fw-semibold">¡Todo al día!</h5>
+        <p class="text-light-50 mb-0">No tienes tareas registradas. Agrega una nueva desde el formulario.</p>
+      </div>
+    `;
+    return;
+  }
+
+  // Si existen tareas, renderizarlas en el DOM
   taskManager.tasks.forEach(task => {
     let badgeClass = 'bg-warning text-dark';
     let badgeText = 'Pendiente';
@@ -41,21 +67,23 @@ function renderTasks() {
     }
 
     const taskHtml = `
-      <div class="card card-tarea bg-secondary text-white mb-3 ${cardClass}" data-task-id="${task.id}">
-        <div class="card-body">
+      <div class="card card-tarea text-white p-3 ${cardClass}" data-task-id="${task.id}">
+        <div class="card-body p-0">
           <div class="d-flex justify-content-between align-items-center mb-2">
-            <h5 class="card-title mb-0">${task.name}</h5>
+            <h5 class="card-title mb-0 fs-5">${task.name}</h5>
             <span class="badge ${badgeClass}">${badgeText}</span>
           </div>
-          <p class="card-text">${task.description}</p>
-          <p class="card-text"><small class="text-light-50">Fecha de entrega: ${task.dueDate}</small></p>
-          <div class="d-flex justify-content-end gap-2">
-            <button class="done-button btn ${btnCompletarClass} btn-sm btn-completar">
-              Mark As Done
-            </button>
-            <button class="delete-button btn btn-danger btn-sm">
-              Eliminar
-            </button>
+          <p class="card-text text-light-50 mb-2">${task.description}</p>
+          <div class="d-flex justify-content-between align-items-center pt-2 border-top border-secondary">
+            <small class="text-light-50"><i class="bi bi-calendar3 me-1"></i>Entrega: ${task.dueDate}</small>
+            <div class="d-flex gap-2">
+              <button class="done-button btn ${btnCompletarClass} btn-sm btn-completar">
+                <i class="bi bi-check-lg"></i>
+              </button>
+              <button class="delete-button btn btn-outline-danger btn-sm">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -64,10 +92,10 @@ function renderTasks() {
   });
 }
 
-// Cargar tareas al iniciar
+// Renderizar tareas guardadas al cargar la vista
 renderTasks();
 
-// Función de validación de entradas
+// 3. Función de validación de formulario
 function validFormFieldInput(data) {
   if (data.nombre.trim() === '') return "El nombre de la tarea no puede estar vacío.";
   if (data.descripcion.trim() === '') return "La descripción no puede estar vacía.";
@@ -76,7 +104,7 @@ function validFormFieldInput(data) {
   return true;
 }
 
-// Escuchar evento submit del formulario
+// 4. Escuchador de envío de formulario (Crear Tarea)
 if (formTarea) {
   formTarea.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -108,11 +136,11 @@ if (formTarea) {
   });
 }
 
-// Delegación de eventos para la Lista de Tareas (Paso 2 y Paso 5 Tarea 7)
+// 5. Delegación de eventos para tarjetas de tareas
 if (contenedorTareas) {
   contenedorTareas.addEventListener('click', (event) => {
     
-    // 1. Detección del botón "Mark As Done" (.done-button)
+    // ACCIÓN 1: Marcar como Hecho (Mark As Done)
     const btnDone = event.target.closest('.done-button');
     if (btnDone) {
       const parentTask = btnDone.closest('.card-tarea');
@@ -121,22 +149,34 @@ if (contenedorTareas) {
         const task = taskManager.getTaskById(taskId);
         
         if (task) {
-          task.status = (task.status === 'DONE') ? 'PORHACER' : 'DONE';
+          task.status = (task.status === 'DONE' || task.status === 'COMPLETADA') ? 'PORHACER' : 'DONE';
           taskManager.save();
           renderTasks();
         }
       }
     }
 
-    // 2. Detección del botón "Eliminar" (.delete-button)
-    if (event.target.classList.contains('delete-button')) {
-      const parentTask = event.target.closest('.card-tarea');
+    // ACCIÓN 2: Interceptar eliminación y abrir modal de advertencia
+    const btnDelete = event.target.closest('.delete-button');
+    if (btnDelete) {
+      const parentTask = btnDelete.closest('.card-tarea');
       if (parentTask) {
-        const taskId = Number(parentTask.dataset.taskId);
-        taskManager.deleteTask(taskId);
-        taskManager.save();
-        renderTasks();
+        idTareaAEliminar = Number(parentTask.dataset.taskId);
+        modalConfirmarBS.show();
       }
+    }
+  });
+}
+
+// 6. Confirmación definitiva de eliminación desde el Modal
+if (btnConfirmarEliminar) {
+  btnConfirmarEliminar.addEventListener('click', () => {
+    if (idTareaAEliminar !== null) {
+      taskManager.deleteTask(idTareaAEliminar);
+      taskManager.save();
+      renderTasks();
+      modalConfirmarBS.hide();
+      idTareaAEliminar = null;
     }
   });
 }
